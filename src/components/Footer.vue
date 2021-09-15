@@ -1,0 +1,7 @@
+<template>
+  <footer class="footer navbar-bottom">
+    <p class="text-right">
+      <small>2019-2021 joedoe</small>
+    </p>
+  </footer>
+</template>
