@@ -4,9 +4,4 @@ const toTitleDate = d => {
     return w[date.getDay()] + ", " + date.toLocaleDateString("de-DE");
 }
 
-let id = 0;
-const generateID = function* () {
-    yield id++;
-}
-
-export {toTitleDate, generateID}
+export {toTitleDate}
