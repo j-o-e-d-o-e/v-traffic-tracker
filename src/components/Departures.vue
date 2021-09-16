@@ -1,0 +1,38 @@
+<template>
+  <h5>Pie chart</h5>
+</template>
+
+<script>
+export default {
+  name: 'Departures',
+  props: {
+    departures: Object
+  },
+  setup() {
+    const pieChart = {
+      id: 'pie',
+      type: 'pie',
+      data: {
+        labels: ['Intercontinental', 'Europe', 'National', 'Unknown'],
+        datasets: [
+          {
+            backgroundColor: [
+              '#41B883',
+              '#E46651',
+              '#00D8FF',
+              '#DD1B16'
+            ],
+            data: [40, 20, 80, 10]
+          }
+        ]
+      }
+    }
+    return {
+      pieChart
+    }
+  },
+  created() {
+    console.log(this.departures);
+  }
+}
+</script>
