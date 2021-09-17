@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import Toolbar from '../components/BtnToolbar'
+import Toolbar from '../components/Toolbar'
 import {toTitleDate} from "@/util/Utils";
 // import Flights from "../components/LineChart"
 

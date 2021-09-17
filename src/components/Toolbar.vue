@@ -16,12 +16,12 @@
       <button type="button"
               @click="$emit('down')"
               :disabled="down.disabled"
-              class="btn btn-success"><i class="fa fa-plane"></i>
+              class="btn btn-success">{{ down.text }}
       </button>
       <button type="button"
               @click="$emit('up')"
               :disabled="up.disabled"
-              class="btn btn-success"> Week
+              class="btn btn-success"> {{ up.text }}
       </button>
     </div>
   </div>
@@ -33,15 +33,15 @@ export default {
   props: {
     back: Boolean,
     next: Boolean,
-    up: {
-      text: String,
-      disabled: Boolean,
-    },
     down: {
       text: String,
       disabled: Boolean,
+    },
+    up: {
+      text: String,
+      disabled: Boolean,
     }
-  }
+  },
 }
 </script>
 

@@ -4,12 +4,12 @@
              @back="onPrev"
              :next="!day.next"
              @next="onNext"
-             :down="{disabled: true}"
+             :down="{text: 'Flights', disabled: !day.flights}"
              @down="onFlights"
-             :up="{disabled: true}"
+             :up="{text: 'Week', disabled: false}"
              @up="onWeek"
     />
-    <h1>{{ title }}</h1>
+    <h3>{{ title }}</h3>
     <Flights :chart-data="day.hours_flight" :chart-labels="labels"></Flights>
     <br>
     <div class="table-responsive">
@@ -32,19 +32,32 @@
         </tbody>
       </table>
     </div>
+    <section v-if="day.departures && day.date !=='2021-09-09'">
+      <hr>
+      <h3>Departures</h3>
+      <Departures :chartData="day.departures"></Departures>
+      <h5>Top airports <small>(flights)</small></h5>
+      <ol>
+        <li v-for="airport in day.airports" :key="airport">
+          <strong>{{ airport.name }}</strong> ({{ airport.flights }})
+        </li>
+      </ol>
+    </section>
   </section>
 </template>
 
 <script>
-import Toolbar from '../components/BtnToolbar'
+import Toolbar from '../components/Toolbar'
 import {toTitleDate} from "@/util/Utils";
 import Flights from "../components/LineChart"
+import Departures from "../components/PieChart"
 
 export default {
   name: 'Day',
   components: {
     Toolbar,
-    Flights
+    Flights,
+    Departures
   },
   data: function () {
     return {
@@ -76,6 +89,7 @@ export default {
     async initData(url) {
       const res = await fetch(url);
       this.day = await res.json();
+      console.log(this.day.date);
     },
     async onPrev() {
       await this.initData(this.day._links.prev_day.href);
