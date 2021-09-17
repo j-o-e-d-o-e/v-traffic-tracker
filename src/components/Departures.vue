@@ -1,38 +1,27 @@
-<template>
-  <h5>Pie chart</h5>
-</template>
-
 <script>
-export default {
+import { defineComponent } from 'vue'
+import { Pie } from 'vue3-chart-v2'
+
+export default defineComponent({
   name: 'Departures',
-  props: {
-    departures: Object
+  extends: Pie,
+  props:{
+    departures: Object,
+    as: Array
   },
-  setup() {
-    const pieChart = {
-      id: 'pie',
-      type: 'pie',
-      data: {
-        labels: ['Intercontinental', 'Europe', 'National', 'Unknown'],
-        datasets: [
-          {
-            backgroundColor: [
-              '#41B883',
-              '#E46651',
-              '#00D8FF',
-              '#DD1B16'
-            ],
-            data: [40, 20, 80, 10]
-          }
-        ]
-      }
-    }
-    return {
-      pieChart
-    }
-  },
-  created() {
+  mounted () {
     console.log(this.departures);
+    // Overwriting base render method with actual data.
+    this.renderChart({
+      labels: ['Intercontinental', 'Europe', 'National', 'Unknown'],
+      datasets: [
+        {
+          label: 'Departures',
+          backgroundColor: ['#f87979', '#cdf779', '#79d5f6', '#f5ad79'],
+          data: this.as
+        }
+      ]
+    })
   }
-}
+})
 </script>

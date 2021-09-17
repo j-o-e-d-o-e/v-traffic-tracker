@@ -28,7 +28,9 @@
     <h3>
       Departures <br> <small>(09.09.2019-09.09.2021)</small>
     </h3>
-    <Departures :departures="stats.departures"></Departures>
+<!--    <Departures :departures="stats.departures"></Departures>-->
+    <Departures :as="[20,30,40,10]"></Departures>
+<!--    <Departures></Departures>-->
     <!--  <div *ngIf="stats.airports != undefined">-->
     <!--    <app-airports [departures]="stats.departures" [airports]="stats.airports" [subHeadline]="true"></app-airports>-->
     <!--  </div>-->
