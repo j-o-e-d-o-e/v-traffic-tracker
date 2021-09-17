@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <section v-if="!loading">
     <Toolbar :back="!day.prev"
              @back="onPrev"
              :next="!day.next"
@@ -10,7 +10,7 @@
              @up="onWeek"
     />
     <h1>{{ title }}</h1>
-        <Flights :chart-data="day.hours_flight" :chart-labels="labels()"></Flights>
+    <Flights :chart-data="day.hours_flight" :chart-labels="labels()"></Flights>
     <br>
     <div class="table-responsive">
       <table class="table table-striped table-bordered">
@@ -32,7 +32,7 @@
         </tbody>
       </table>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -53,16 +53,7 @@ export default {
       loading: true
     };
   },
-  watch: {
-    $route(to, from) {
-      console.log(to, from);
-    }
-  },
   methods: {
-    fetch: async function (url) {
-      const res = await fetch(url);
-      return res.json();
-    },
     labels() {
       let chartLabels = [];
       for (let i = 0; i < 24; i++) {
@@ -72,13 +63,15 @@ export default {
     },
     async onPrev() {
       this.day = await this.fetch(this.day._links.prev_day.href);
+      await this.$router.push({name: 'day', params: {date: this.day.date}});
       this.setData();
     },
     async onNext() {
       this.day = await this.fetch(this.day._links.next_day.href);
+      await this.$router.push({name: 'day', params: {date: this.day.date}});
       this.setData();
     },
-    onFlights(){
+    onFlights() {
       console.log('onFlights');
     },
     onWeek() {
@@ -87,13 +80,17 @@ export default {
     setData() {
       this.title = toTitleDate(this.day.date);
       this.loading = false;
+    },
+    fetch: async function (url) {
+      const res = await fetch(url);
+      return res.json();
     }
   },
   async created() {
-    if (this.$route.params.date) {
-      this.day = await this.fetch('https://traffic-tracker.herokuapp.com/api/days/' + this.$route.params.date);
-    } else {
+    if (!this.$route.params.date) {
       this.day = await this.fetch('https://traffic-tracker.herokuapp.com/api/days/current');
+    } else {
+      this.day = await this.fetch(`https://traffic-tracker.herokuapp.com/api/days/'${this.$route.params.date}`);
     }
     this.setData();
   }

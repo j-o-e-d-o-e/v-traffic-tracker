@@ -82,7 +82,7 @@ export default {
   },
   async created() {
     if (this.$route.params.date) {
-      this.week = await this.fetch('https://traffic-tracker.herokuapp.com/api/weeks/' + this.$route.params.date);
+      this.week = await this.fetch(`https://traffic-tracker.herokuapp.com/api/weeks/${this.$route.params.date}`);
     } else {
       this.week = await this.fetch('https://traffic-tracker.herokuapp.com/api/weeks/current');
     }

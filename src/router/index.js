@@ -14,7 +14,8 @@ const routes = [
     {
         path: '/day/:date?',
         name: 'day',
-        component: Day
+        component: Day,
+        props: true
     },
     {
         path: '/week/:date?',
@@ -33,9 +34,7 @@ const routes = [
     },
 ]
 
-const router = createRouter({
+export default createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes
 })
-
-export default router

@@ -10,25 +10,24 @@ export default defineComponent({
     chartLabels: Array
   },
   methods: {
-    labels() {
-      let chartLabels = [];
-      for (let i = 0; i < 24; i++) {
-        chartLabels.push(i.toString() + ':00');
-      }
-      return chartLabels;
+    render() {
+      this.renderChart({
+        labels: this.chartLabels,
+        datasets: [
+          {
+            label: 'Flights',
+            backgroundColor: '#f87979',
+            data: this.chartData
+          }
+        ]
+      })
     }
   },
   mounted() {
-    this.renderChart({
-      labels: this.chartLabels,
-      datasets: [
-        {
-          label: 'Flights',
-          backgroundColor: '#f87979',
-          data: this.chartData
-        }
-      ]
-    })
+    this.render();
+  },
+  updated() {
+    this.render();
   }
 })
 </script>
