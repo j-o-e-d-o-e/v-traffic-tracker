@@ -98,7 +98,7 @@ export default {
       await this.$router.push({name: 'day', params: {date: this.day.date}});
     },
     onFlights() {
-      console.log('onFlights');
+      this.$router.push({name: 'flights', params: {date: this.day.date}});
     },
     onWeek() {
       this.$router.push({name: 'week', params: {date: this.day.date}});

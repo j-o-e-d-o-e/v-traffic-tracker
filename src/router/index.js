@@ -4,6 +4,7 @@ import Day from '../views/Day'
 import Week from '../views/Week'
 import Month from '../views/Month'
 import Year from '../views/Year'
+import Flights from '../views/Flights'
 import Forecast from '../views/Forecast'
 import Stats from '../views/Stats'
 
@@ -33,6 +34,11 @@ const routes = [
         path: '/year/:year?',
         name: 'year',
         component: Year
+    },
+    {
+        path: '/flights/:date',
+        name: 'flights',
+        component: Flights
     },
     {
         path: '/forecast',

@@ -43,7 +43,7 @@ export default {
       disabled: Boolean,
       show: Boolean
     }
-  },
+  }
 }
 </script>
 
