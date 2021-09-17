@@ -1,33 +1,30 @@
 <template>
   <div v-if="!loading">
-    <Toolbar :back="!day.prev"
+    <Toolbar :back="!week.prev"
              @back="onPrev"
-             :next="!day.next"
+             :fwd="!week.next"
              @next="onNext"
-             :down="{disabled: true}"
-             @down="onFlights"
-             :up="{disabled: true}"
-             @up="onWeek"
     />
     <h1>{{ title }}</h1>
-        <Flights :chart-data="day.hours_flight" :chart-labels="labels()"></Flights>
-    <br>
+    <!--    <Flights :chart-data="day.hours_flight" :chart-labels="labels()"></Flights>-->
     <div class="table-responsive">
       <table class="table table-striped table-bordered">
         <thead class="table-dark">
         <tr>
           <th>Total</th>
+          <th>23:00-0:00h</th>
+          <th>0:00-5:45h</th>
           <th>Avg altitude</th>
           <th>Avg speed</th>
-          <th>Wind speed</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-          <td>{{ day.total }}</td>
-          <td>{{ day.avg_altitude }} m</td>
-          <td>{{ day.avg_speed }} km/h</td>
-          <td>{{ day.wind_speed }} km/h</td>
+          <td>{{ week.total }}</td>
+          <td>{{ week.flights_23 }}</td>
+          <td>{{ week.flights_0 }}</td>
+          <td>{{ week.avg_altitude }} m</td>
+          <td>{{ week.avg_speed }} km/h</td>
         </tr>
         </tbody>
       </table>
@@ -38,17 +35,17 @@
 <script>
 import Toolbar from '../components/BtnToolbar'
 import {toTitleDate} from "@/util/Utils";
-import Flights from "../components/LineChart"
+// import Flights from "../components/LineChart"
 
 export default {
-  name: 'Day',
+  name: 'Week',
   components: {
     Toolbar,
-    Flights
+    // Flights
   },
   data: function () {
     return {
-      day: Object,
+      week: Object,
       title: String,
       loading: true
     };
@@ -71,29 +68,23 @@ export default {
       return chartLabels;
     },
     async onPrev() {
-      this.day = await this.fetch(this.day._links.prev_day.href);
+      this.week = await this.fetch(this.week._links.prev_week.href);
       this.setData();
     },
     async onNext() {
-      this.day = await this.fetch(this.day._links.next_day.href);
+      this.week = await this.fetch(this.week._links.next_week.href);
       this.setData();
     },
-    onFlights(){
-      console.log('onFlights');
-    },
-    onWeek() {
-      this.$router.push({name: 'week', params: {date: this.day.date}});
-    },
     setData() {
-      this.title = toTitleDate(this.day.date);
+      this.title = toTitleDate(this.week.start_date) + ' - ' + toTitleDate(this.week.end_date);
       this.loading = false;
     }
   },
   async created() {
     if (this.$route.params.date) {
-      this.day = await this.fetch('https://traffic-tracker.herokuapp.com/api/days/' + this.$route.params.date);
+      this.week = await this.fetch('https://traffic-tracker.herokuapp.com/api/weeks/' + this.$route.params.date);
     } else {
-      this.day = await this.fetch('https://traffic-tracker.herokuapp.com/api/days/current');
+      this.week = await this.fetch('https://traffic-tracker.herokuapp.com/api/weeks/current');
     }
     this.setData();
   }
