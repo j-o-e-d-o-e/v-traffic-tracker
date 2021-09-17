@@ -3,7 +3,6 @@
     <h3>
       Days
     </h3>
-
     <ul>
       <li>
         <strong>Total flights</strong> (09.09.2019-09.09.2021): {{ stats.total }}
@@ -28,18 +27,12 @@
     <h3>
       Departures <br> <small>(09.09.2019-09.09.2021)</small>
     </h3>
-<!--    <Departures :departures="stats.departures"></Departures>-->
-    <Departures :as="[20,30,40,10]"></Departures>
-<!--    <Departures></Departures>-->
-    <!--  <div *ngIf="stats.airports != undefined">-->
-    <!--    <app-airports [departures]="stats.departures" [airports]="stats.airports" [subHeadline]="true"></app-airports>-->
-    <!--  </div>-->
+    <Departures :chartData="this.stats.departures"></Departures>
 
     <hr>
     <h3>
       Flights <small>(last 60 days)</small>
     </h3>
-
     <ul>
       <li>
         <strong>Most flights</strong>: {{ stats.plane_with_most_flights.stats }} by plane
@@ -71,15 +64,14 @@
         on <span>{{ stats.min_speed.date }}</span>
       </li>
     </ul>
-
     <h4>Top airlines <small>(flights)</small></h4>
     <ol>
       <li v-for="airline in stats.airlines" :key="airline">
         <strong>{{ airline.name }}</strong> ({{ airline.flights }})
       </li>
     </ol>
-    <hr>
 
+    <hr>
     <h3>
       Forecasts <small>(last 30 days)</small>
     </h3>
@@ -97,7 +89,7 @@
 
     <div class="table-responsive">
       <table class="table table-sm table-striped table-bordered table-hover">
-        <thead class="thead-dark">
+        <thead class="table-dark">
         <tr>
           <th></th>
           <th>No flights predicted</th>
@@ -130,7 +122,7 @@
 </template>
 
 <script>
-import Departures from "../components/Departures"
+import Departures from "../components/PieChart"
 import {toTitleDate} from "@/util/Utils";
 
 export default {
@@ -148,7 +140,7 @@ export default {
     fetch: async function () {
       const res = await fetch('https://traffic-tracker.herokuapp.com/api/stats');
       return res.json();
-    },
+    }
   },
   async created() {
     this.stats = await this.fetch();
