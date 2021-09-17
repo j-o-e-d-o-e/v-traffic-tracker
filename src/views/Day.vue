@@ -7,8 +7,7 @@
              :down="{text: 'Flights', disabled: !day.flights}"
              @down="onFlights"
              :up="{text: 'Week', disabled: false}"
-             @up="onWeek"
-    />
+             @up="onWeek"/>
     <h3>{{ title }}</h3>
     <Flights :chart-data="day.hours_flight" :chart-labels="labels"></Flights>
     <br>
@@ -89,7 +88,6 @@ export default {
     async initData(url) {
       const res = await fetch(url);
       this.day = await res.json();
-      console.log(this.day.date);
     },
     async onPrev() {
       await this.initData(this.day._links.prev_day.href);

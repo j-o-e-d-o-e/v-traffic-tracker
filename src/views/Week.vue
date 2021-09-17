@@ -1,12 +1,15 @@
 <template>
-  <div v-if="!loading">
+  <section v-if="!loading">
     <Toolbar :back="!week.prev"
              @back="onPrev"
-             :fwd="!week.next"
+             :next="!week.next"
              @next="onNext"
-    />
+             :down="{text: 'Days', disabled: false}"
+             @down="onDay"
+             :up="{text: 'Month', disabled: false}"
+             @up="onMonth"/>
     <h1>{{ title }}</h1>
-    <!--    <Flights :chart-data="day.hours_flight" :chart-labels="labels()"></Flights>-->
+    <Flights :chart-data="week.weekdays" :chart-labels="labels"></Flights>
     <div class="table-responsive">
       <table class="table table-striped table-bordered">
         <thead class="table-dark">
@@ -29,64 +32,75 @@
         </tbody>
       </table>
     </div>
-  </div>
+    <section v-if="week.departures">
+      <hr>
+      <h3>Departures</h3>
+      <Departures :chartData="week.departures"></Departures>
+      <h5>Top airports <small>(flights)</small></h5>
+      <ol>
+        <li v-for="airport in week.airports" :key="airport">
+          <strong>{{ airport.name }}</strong> ({{ airport.flights }})
+        </li>
+      </ol>
+    </section>
+  </section>
 </template>
 
 <script>
 import Toolbar from '../components/Toolbar'
-import {toTitleDate} from "@/util/Utils";
-// import Flights from "../components/LineChart"
+import Flights from "../components/LineChart"
+import Departures from '../components/PieChart'
 
 export default {
   name: 'Week',
   components: {
     Toolbar,
-    // Flights
+    Flights,
+    Departures
   },
   data: function () {
     return {
       week: Object,
-      title: String,
       loading: true
     };
   },
-  watch: {
-    $route(to, from) {
-      console.log(to, from);
-    }
-  },
-  methods: {
-    fetch: async function (url) {
-      const res = await fetch(url);
-      return res.json();
+  computed: {
+    title() {
+      const startDate = new Date(this.week.start_date);
+      const endDate = new Date(this.week.end_date);
+      return startDate.toLocaleDateString() + ' - ' + endDate.toLocaleDateString();
     },
     labels() {
-      let chartLabels = [];
-      for (let i = 0; i < 24; i++) {
-        chartLabels.push(i.toString() + ':00');
-      }
-      return chartLabels;
-    },
-    async onPrev() {
-      this.week = await this.fetch(this.week._links.prev_week.href);
-      this.setData();
-    },
-    async onNext() {
-      this.week = await this.fetch(this.week._links.next_week.href);
-      this.setData();
-    },
-    setData() {
-      this.title = toTitleDate(this.week.start_date) + ' - ' + toTitleDate(this.week.end_date);
-      this.loading = false;
+      return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     }
   },
   async created() {
     if (this.$route.params.date) {
-      this.week = await this.fetch(`https://traffic-tracker.herokuapp.com/api/weeks/${this.$route.params.date}`);
+      await this.initData(`https://traffic-tracker.herokuapp.com/api/weeks/${this.$route.params.date}`);
     } else {
-      this.week = await this.fetch('https://traffic-tracker.herokuapp.com/api/weeks/current');
+      await this.initData('https://traffic-tracker.herokuapp.com/api/weeks/current');
     }
-    this.setData();
+    this.loading = false;
+  },
+  methods: {
+    initData: async function (url) {
+      const res = await fetch(url);
+      this.week = await res.json();
+    },
+    async onPrev() {
+      await this.initData(this.week._links.prev_week.href);
+      await this.$router.push({name: 'week', params: {date: this.week.start_date}});
+    },
+    async onNext() {
+      await this.initData(this.week._links.prev_week.href);
+      await this.$router.push({name: 'week', params: {date: this.week.start_date}});
+    },
+    onDay() {
+      this.$router.push({name: 'day', params: {date: this.week.start_date}});
+    },
+    onMonth() {
+      this.$router.push({name: 'month', params: {year: this.week.year, month: this.week.month}});
+    }
   }
 }
 </script>

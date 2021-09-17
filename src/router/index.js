@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home'
 import Day from '../views/Day'
 import Week from '../views/Week'
+import Month from '../views/Month'
 import Forecast from '../views/Forecast'
 import Stats from '../views/Stats'
 
@@ -21,6 +22,11 @@ const routes = [
         path: '/week/:date?',
         name: 'week',
         component: Week
+    },
+    {
+        path: '/month/:year?/:month?',
+        name: 'month',
+        component: Month
     },
     {
         path: '/forecast',
