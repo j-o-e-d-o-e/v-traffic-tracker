@@ -6,7 +6,7 @@
              @next="onNext"
              :down="{text: 'Weeks', disabled: false}"
              @down="onWeek"
-             :up="{text: 'Year', disabled: false}"
+             :up="{text: 'Year', disabled: false, show: true}"
              @up="onYear"/>
     <h1>{{ title }}</h1>
     <Flights :chart-data="month.days" :chart-labels="labels"></Flights>
@@ -83,8 +83,8 @@ export default {
     }
   },
   async created() {
-    if (this.$route.params.date) {
-      await this.initData(`https://traffic-tracker.herokuapp.com/api/months/${this.$route.params.date}`);
+    if (this.$route.params.year && this.$route.params.month) {
+      await this.initData(`https://traffic-tracker.herokuapp.com/api/months/${this.$route.params.year}/${this.$route.params.month}`);
     } else {
       await this.initData('https://traffic-tracker.herokuapp.com/api/months/current');
     }
@@ -97,17 +97,17 @@ export default {
     },
     async onPrev() {
       await this.initData(this.month._links.prev_month.href);
-      await this.$router.push({name: 'month', params: {date: this.month.start_date}});
+      await this.$router.push({name: 'month', params: {year: this.month.year, month: this.month.month}});
     },
     async onNext() {
       await this.initData(this.month._links.next_month.href);
-      await this.$router.push({name: 'month', params: {date: this.month.start_date}});
+      await this.$router.push({name: 'month', params: {year: this.month.year, month: this.month.month}});
     },
     onWeek() {
       this.$router.push({name: 'week', params: {date: this.month.start_date}});
     },
     onYear() {
-      this.$router.push({name: 'year', params: {year: this.day.date}});
+      this.$router.push({name: 'year', params: {year: this.month.year}});
     }
   }
 }

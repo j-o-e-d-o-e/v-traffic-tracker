@@ -3,6 +3,7 @@ import Home from '../views/Home'
 import Day from '../views/Day'
 import Week from '../views/Week'
 import Month from '../views/Month'
+import Year from '../views/Year'
 import Forecast from '../views/Forecast'
 import Stats from '../views/Stats'
 
@@ -27,6 +28,11 @@ const routes = [
         path: '/month/:year?/:month?',
         name: 'month',
         component: Month
+    },
+    {
+        path: '/year/:year?',
+        name: 'year',
+        component: Year
     },
     {
         path: '/forecast',

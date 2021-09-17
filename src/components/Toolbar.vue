@@ -21,6 +21,7 @@
       <button type="button"
               @click="$emit('up')"
               :disabled="up.disabled"
+              v-show="up.show"
               class="btn btn-success"> {{ up.text }}
       </button>
     </div>
@@ -40,6 +41,7 @@ export default {
     up: {
       text: String,
       disabled: Boolean,
+      show: Boolean
     }
   },
 }

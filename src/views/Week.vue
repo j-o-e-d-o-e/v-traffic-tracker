@@ -6,7 +6,7 @@
              @next="onNext"
              :down="{text: 'Days', disabled: false}"
              @down="onDay"
-             :up="{text: 'Month', disabled: false}"
+             :up="{text: 'Month', disabled: false, show: true}"
              @up="onMonth"/>
     <h1>{{ title }}</h1>
     <Flights :chart-data="week.weekdays" :chart-labels="labels"></Flights>
